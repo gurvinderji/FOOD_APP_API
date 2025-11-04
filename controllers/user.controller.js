@@ -69,7 +69,6 @@ export const updateUser = async (req, res) => {
 
 export const updatePassword = async (req, res) => {
   try {
-    //find user
     const user = await UserModel.findById({ _id: req.body.id });
     //valdiation
     if (!user) {
@@ -78,7 +77,7 @@ export const updatePassword = async (req, res) => {
         message: "Usre Not Found",
       });
     }
-    // get data from user
+
     const { oldPassword, newPassword } = req.body;
     if (!oldPassword || !newPassword) {
       return res.status(500).send({
@@ -86,7 +85,7 @@ export const updatePassword = async (req, res) => {
         message: "Please Provide Old or New PasswOrd",
       });
     }
-    //check user password  | compare password
+
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
       return res.status(500).send({
@@ -94,7 +93,6 @@ export const updatePassword = async (req, res) => {
         message: "Invalid old password",
       });
     }
-    //hashing password
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
