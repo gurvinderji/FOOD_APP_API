@@ -26,3 +26,27 @@ export const createCategory = async (req, res) => {
     });
   }
 };
+
+export const getAllCategory = async (req, res) => {
+  try {
+    const categories = await CategoryModel.find({});
+    if (!categories) {
+      return res.status(404).send({
+        success: false,
+        message: "No Categories found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      totalCat: categories.length,
+      categories,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Erorr in get All Category API",
+      error,
+    });
+  }
+};
