@@ -50,3 +50,74 @@ export const getAllCategory = async (req, res) => {
     });
   }
 };
+
+export const updateCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { title, imageUrl } = req.body;
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(
+      id,
+      { title, imageUrl },
+      { new: true }
+    );
+    if (!updatedCategory) {
+      return res.status(500).json({
+        success: false,
+        message: "No Category Found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Category Updated Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "error in update cat api",
+      error,
+    });
+  }
+};
+
+// DLEETE CAT
+export const deleteCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide Category ID",
+      });
+    }
+    const category = await CategoryModel.findById(id);
+    if (!category) {
+      return res.status(500).json({
+        success: false,
+        message: "No Category Found With this id",
+      });
+    }
+    await CategoryModel.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      message: "category Deleted succssfully",
+    });
+  } catch (error) {
+    console.log(error);
+    // Check if it's an ObjectId casting error
+    if (error.name === "CastError" && error.kind === "ObjectId") {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid category ID format. ID must be a 24-character hex string.",
+      });
+    }
+    // For other errors
+    res.status(500).json({
+      success: false,
+      message: "error in Delete Cat APi",
+      error,
+    });
+  }
+};
