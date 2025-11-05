@@ -18,6 +18,7 @@ import morgan from "morgan";
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import resturantRouter from "./routes/resturent.route.js";
+import categoryRouter from "./routes/category.route.js";
 
 const app = express();
 
@@ -33,3 +34,4 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/resturent", resturantRouter);
+app.use("/api/category", categoryRouter);
