@@ -15,10 +15,6 @@ mongoose
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import authRouter from "./routes/auth.route.js";
-import userRouter from "./routes/user.route.js";
-import resturantRouter from "./routes/resturent.route.js";
-import categoryRouter from "./routes/category.route.js";
 
 const app = express();
 
@@ -31,7 +27,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
+import authRouter from "./routes/auth.route.js";
+import userRouter from "./routes/user.route.js";
+import resturantRouter from "./routes/resturent.route.js";
+import categoryRouter from "./routes/category.route.js";
+import foodRouter from "./routes/food.route.js";
+
+// Routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/resturent", resturantRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/food", foodRouter);
