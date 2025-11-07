@@ -51,92 +51,106 @@ export const createFood = async (req, res) => {
 };
 
 // GET ALLL FOODS
-// const getAllFoodsController = async (req, res) => {
-//   try {
-//     const foods = await foodModal.find({});
-//     if (!foods) {
-//       return res.status(404).send({
-//         success: false,
-//         message: "no food items was found",
-//       });
-//     }
-//     res.status(200).send({
-//       success: true,
-//       totalFoods: foods.length,
-//       foods,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({
-//       success: false,
-//       message: "Erro In Get ALL Foods API",
-//       error,
-//     });
-//   }
-// };
+export const getAllFoods = async (req, res) => {
+  try {
+    const foods = await FoodModel.find({});
+    if (!foods) {
+      return res.status(404).json({
+        success: false,
+        message: "no food items was found",
+      });
+    }
+    res.status(200).send({
+      success: true,
+      totalFoods: foods.length,
+      foods,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Erro In Get ALL Foods API",
+      error,
+    });
+  }
+};
 
 // // GET SINGLE FOOD
-// const getSingleFoodController = async (req, res) => {
-//   try {
-//     const foodId = req.params.id;
-//     if (!foodId) {
-//       return res.status(404).send({
-//         success: false,
-//         message: "please provide id",
-//       });
-//     }
-//     const food = await foodModal.findById(foodId);
-//     if (!food) {
-//       return res.status(404).send({
-//         success: false,
-//         message: "No Food Found with htis id",
-//       });
-//     }
-//     res.status(200).send({
-//       success: true,
-//       food,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({
-//       success: false,
-//       message: "Error In get SIngle Food API",
-//       error,
-//     });
-//   }
-// };
+export const getSingleFood = async (req, res) => {
+  try {
+    const foodId = req.params.id;
+    if (!foodId) {
+      return res.status(404).json({
+        success: false,
+        message: "please provide id",
+      });
+    }
+    const food = await FoodModel.findById(foodId);
+    if (!food) {
+      return res.status(404).json({
+        success: false,
+        message: "No Food Found with hits id",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      food,
+    });
+  } catch (error) {
+    console.log(error);
+    if (error.name === "CastError" && error.kind === "ObjectId") {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid category ID format. ID must be a 24-character hex string.",
+      });
+    }
+    res.status(500).json({
+      success: false,
+      message: "Error In get SIngle Food API",
+      error,
+    });
+  }
+};
 
-// // GET FOOD BY RESTURANT
-// const getFoodByResturantController = async (req, res) => {
-//   try {
-//     const resturantId = req.params.id;
-//     if (!resturantId) {
-//       return res.status(404).send({
-//         success: false,
-//         message: "please provide id",
-//       });
-//     }
-//     const food = await foodModal.find({ resturnat: resturantId });
-//     if (!food) {
-//       return res.status(404).send({
-//         success: false,
-//         message: "No Food Found with htis id",
-//       });
-//     }
-//     res.status(200).send({
-//       success: true,
-//       message: "food base on restuatrn",
-//       food,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({
-//       success: false,
-//       message: "Error In get SIngle Food API",
-//       error,
-//     });
-//   }
-// };
+// GET FOOD BY RESTURANT
+export const getFoodByResturant = async (req, res) => {
+  try {
+    const resturantId = req.params.id;
+    if (!resturantId) {
+      return res.status(404).json({
+        success: false,
+        message: "please provide id",
+      });
+    }
+    const food = await FoodModel.find({ resturant: resturantId });
+    if (!food || food.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No Food Found with this id",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "food base on restuatrn",
+      food,
+    });
+  } catch (error) {
+    console.log(error);
+    if (error.name === "CastError" && error.kind === "ObjectId") {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid category ID format. ID must be a 24-character hex string.",
+      });
+    }
+    res.status(500).json({
+      success: false,
+      message: "Error In get SIngle Food API",
+      error,
+    });
+  }
+};
 
 // // UPDATE FOOD ITEm
 // const updateFoodController = async (req, res) => {
